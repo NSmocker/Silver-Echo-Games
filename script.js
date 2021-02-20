@@ -30,7 +30,7 @@ function OutModels()
 function HoverArts()
 {
 	var element = document.getElementById("arts_button");
-	element.src = "img/Arts Hover.png";
+	element.src = "img/ARTS Hover.png";
 }
 function OutArts()
 {

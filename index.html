@@ -1,39 +1,133 @@
 <!DOCTYPE html>
+
 <html>
-<head>
-	<title>Silver Echo Portfolio</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<script src="script.js"></script>
-</head>
-<body>
- 
- 
+	<head>
 
-<div id="SideMenu"> 
-<a href="index.html"><img src="img/Games Idle.png" id="games_button" class="menu_button" onclick="Button_click_sound()" onmouseover="HoverGames()" onmouseout="OutGames()">   </a>
-<a href="#"><img src="img/3D Models Idle.png" id="3d_models_button" class="menu_button" onclick="Button_click_sound()" onmouseover="HoverModels()" onmouseout="OutModels()"> </a>
-<a href="Arts.html"><img src="img/Arts Idle.png" id="arts_button" class="menu_button" onclick="Button_click_sound()" onmouseover="HoverArts()" onmouseout="OutArts()"> </a>
-</div>
+		<!-- Product name as page title -->
+		<title>%UNITY_WEB_NAME%</title>
 
-<div id="content">
-<img src="img/Frame.png" id="conent_backgr">
-<div id ="conent_info">
- <img src="img\games\briks panzer\main_screen.png" class="game_logo">  
- <div class="description"> Веселая детская игра, в стиле "Настолки".В этой игре нужно играть за танчик созданный из конструтора, и стрелять в другие танки. Каждый уровень имеет свой уникальный дизайн локации.В этой игре вы найдете:
-<p>- 3 уровня сложности.</p>
-<p>- По 6 локаций на каждый уровень сложности.</p>
-<p>- Своя уникальная механика и игровой процесс для каждой локации.</p>
-<a href="https://play.google.com/store/apps/details?id=com.JoypadEnjoy.BricksPanzerFree"><img src="img/Play Market Idle.png" id="play_market_button" class="menu_button" onclick="Button_click_sound()" onmouseover="HoverPlayMarket()" onmouseout="OutPlayMarket()">  </a>
-<a href="https://sinchik97.itch.io/briks-panzer"><img src="img/Play Demo Idle.png" id="play_demo_button" class="menu_button" onclick="Button_click_sound()" onmouseover="HoverPlayDemo()" onmouseout="OutPlayDemo()">  </a>
+		<!-- Page Styling -->
+		<style type="text/css">
+		body
+		{
+			margin:0;
+			background: #2a2a2a;
+		}	
+		
+		#gameContainer
+		{
+			width: 100vw;
+			height: 100vh;
+		}
 
+		canvas
+		{
+			display: block;
+			width: 100%;
+			height: 100%;			
+			/*Change this to change player background color*/
+			/*background: #2a2a2a;*/
 
-</div>
-</div>
+		}
 
+		.pre-loader
+		{
+			display: flex;
+			position: absolute;
+			top:0;left: 0;
+			width: 100vw;
+			height: 100vh;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			color: #fff;
+			display: none;			
+		}		
 
+		.pre-loader .title
+		{
+			color: #eee;
+			letter-spacing: 0.1em;
+		}
 
+      	.progress-bar
+      	{
+      		width: 40%;      		      		
+      		padding: 5px;
+      		background: #1a1a1a;
+      		box-shadow: 0 1px 5px #000 inset, 0 1px 0 #444;
+      		border-radius: 18px;
+      	}
 
-</div>
- 
-</body>
+      	.progress-bar .fill
+      	{
+      		background: #34c2e3;
+      		height: 24px;
+      		box-shadow: 0 1px 0 rgba(255, 255, 255, .5) inset;
+      		border-radius: 18px;
+      		color: #fff;
+      		text-align: center;     
+      		line-height: 24px; 		
+      		overflow: hidden;      		
+      	}
+
+		</style>
+	</head>	
+	
+	<body>
+
+		<!-- The webgl canvas will be loaded inside gameContainer -->
+		<div id="gameContainer"></div>
+
+		<div class="pre-loader">			
+			<h3 class="title">LOADING...</h3>		
+			<div class="progress-bar">
+				<div class="fill" style="width:20%;">10%</div>
+			</div>
+
+		</div>
+
+	</body>
+
+	<!-- UnityLoader.js is enqueued here -->
+	<script src="%UNITY_WEBGL_LOADER_URL%"></script>
+
+	<script type="text/javascript">
+	var gameInstance = UnityLoader.instantiate("gameContainer", "%UNITY_WEBGL_BUILD_URL%", {onProgress: function(gameInstance, progress)
+	{
+
+		if (!gameInstance.Module)
+			return;
+
+		//Get the preloader element
+		const preLoader = document.querySelector(".pre-loader");
+		//Get the progressbar fill element
+		const progressBar = preLoader.querySelector(".progress-bar .fill");	
+
+		if (!gameInstance.progress) 
+		{    
+			//Show the progress fill
+			preLoader.style.display = "flex";
+			//Assign to use the progress bar fill
+			gameInstance.progress = progressBar;
+		}
+
+		//Update the fill element width by progress
+		gameInstance.progress.textContent =gameInstance.progress.style.width =(100 * progress) + "%";
+
+		//If unity finished loading
+		if (progress === 1 && !gameInstance.removeTimeout) 
+		{
+			//Hide the preloader with a delay
+			gameInstance.removeTimeout = setTimeout(function() 
+			{
+				//Hide the preloader
+				preLoader.style.display = "none"
+
+			}, 500);
+		}
+
+	}});
+  	</script>
+
 </html>
